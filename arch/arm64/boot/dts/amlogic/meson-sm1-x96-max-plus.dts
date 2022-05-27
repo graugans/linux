@@ -36,10 +36,6 @@
 		sound-name-prefix = "MIC";
 	};
 
-	ethernet0 {
-		status = "enabled";
-	};
-
 	chosen {
 		stdout-path = "serial0:115200n8";
 	};
@@ -344,6 +340,31 @@
 	};
 };
 
+&ext_mdio {
+	external_phy: ethernet-phy@0 {
+		/* Realtek RTL8211F (0x001cc916) */
+		reg = <0>;
+		max-speed = <1000>;
+
+		reset-assert-us = <10000>;
+		reset-deassert-us = <80000>;
+		reset-gpios = <&gpio GPIOZ_15 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
+
+		interrupt-parent = <&gpio_intc>;
+		/* MAC_INTR on GPIOZ_14 */
+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
+	};
+};
+
+&ethmac {
+	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+	phy-mode = "rgmii";
+	phy-handle = <&external_phy>;
+};
+
+
 &arb {
 	status = "okay";
 };
@@ -392,12 +413,6 @@
 	operating-points-v2 = <&cpu_opp_table>;
 	clocks = <&clkc CLKID_CPU3_CLK>;
 	clock-latency = <50000>;
-};
-
-&ethmac {
-	status = "okay";
-	phy-handle = <&internal_ephy>;
-	phy-mode = "rmii";
 };
 
 &frddr_a {
