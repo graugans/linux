@@ -129,10 +129,11 @@
 	pinctrl-0 = <&eth_pins>;
 	pinctrl-names = "default";
 	status = "okay";
-	phy-mode = "rgmii-txid";
+	phy-mode = "rgmii-id";
 	phy-handle = <&external_phy>;
-	interrupts = <0x00 0x08 0x01>;
-	amlogic,rx-internal-delay-ps = <2000>;
+	interrupts = <GIC_SPI 8 IRQ_TYPE_EDGE_RISING>;
+	clocks = <&clkc CLKID_ETH>;
+	/*amlogic,rx-internal-delay-ps = <2000>;*/
 };
 
 &cpu0 {
