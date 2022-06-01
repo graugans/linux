@@ -163,6 +163,9 @@
 	clock-latency = <50000>;
 };
 
+/*
+ * This is the debug UART. Which is available through PINS on the PCB
+ */
 &uart_AO {
 	status = "okay";
 	pinctrl-0 = <&uart_ao_a_pins>;
